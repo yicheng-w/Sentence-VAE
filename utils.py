@@ -13,12 +13,12 @@ class OrderedCounter(Counter, OrderedDict):
         return self.__class__, (OrderedDict(self),)
 
 def to_var(x, volatile=False):
-    if torch.cuda.is_available():
-        x = x.cuda()
+    #if torch.cuda.is_available():
+    #    x = x.cuda()
     return Variable(x, volatile=volatile)
 
 
-def idx2word(idx, i2w, pad_idx):
+def idx2word(idx, i2w, pad_idx, eos_idx=-1):
 
     sent_str = [str()]*len(idx)
 
@@ -28,6 +28,9 @@ def idx2word(idx, i2w, pad_idx):
 
             if word_id == pad_idx:
                 break
+            if eos_idx >=0 and word_id == eos_idx:
+                break
+
             sent_str[i] += i2w[str(word_id)] + " "
 
         sent_str[i] = sent_str[i].strip()

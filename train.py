@@ -19,6 +19,7 @@ def main(args):
 
     splits = ['train', 'valid'] + (['test'] if args.test else [])
 
+
     datasets = OrderedDict()
     for split in splits:
         datasets[split] = PTB(
@@ -46,8 +47,8 @@ def main(args):
         bidirectional=args.bidirectional
         )
 
-    if torch.cuda.is_available():
-        model = model.cuda()
+    #if torch.cuda.is_available():
+    #    model = model.cuda()
 
     print(model)
 
@@ -84,7 +85,8 @@ def main(args):
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 
-    tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.Tensor
+    #tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.Tensor
+    tensor = torch.Tensor
     step = 0
     for epoch in range(args.epochs):
 
@@ -95,7 +97,7 @@ def main(args):
                 batch_size=args.batch_size,
                 shuffle=split=='train',
                 num_workers=cpu_count(),
-                pin_memory=torch.cuda.is_available()
+                pin_memory=False #$torch.cuda.is_available()
             )
 
             tracker = defaultdict(tensor)

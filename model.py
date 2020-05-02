@@ -9,7 +9,8 @@ class SentenceVAE(nn.Module):
                 sos_idx, eos_idx, pad_idx, unk_idx, max_sequence_length, num_layers=1, bidirectional=False):
 
         super().__init__()
-        self.tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.Tensor
+        #self.tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.Tensor
+        self.tensor = torch.Tensor
 
         self.max_sequence_length = max_sequence_length
         self.sos_idx = sos_idx
@@ -87,8 +88,8 @@ class SentenceVAE(nn.Module):
         if self.word_dropout_rate > 0:
             # randomly replace decoder input with <unk>
             prob = torch.rand(input_sequence.size())
-            if torch.cuda.is_available():
-                prob=prob.cuda()
+            #if torch.cuda.is_available():
+            #    prob=prob.cuda()
             prob[(input_sequence.data - self.sos_idx) * (input_sequence.data - self.pad_idx) == 0] = 1
             decoder_input_sequence = input_sequence.clone()
             decoder_input_sequence[prob < self.word_dropout_rate] = self.unk_idx
